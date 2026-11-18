@@ -79,16 +79,28 @@ function App() {
         >
           <div
             style={{
+<<<<<<< HEAD
               width: 52,
               height: 52,
               border: "3px solid rgba(229,9,20,0.2)",
               borderTopColor: "var(--netflix-red)",
+=======
+              width: 56,
+              height: 56,
+              border: "3px solid rgba(124,58,237,0.2)",
+              borderTopColor: "var(--accent-2)",
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
               borderRadius: "50%",
               animation: "spin 0.7s linear infinite",
             }}
           />
+<<<<<<< HEAD
           <p style={{ color: "#ffffff", fontWeight: 600, letterSpacing: "0.5px" }}>
             Authorizing Cloudflix Stream…
+=======
+          <p style={{ color: "var(--text-secondary)", fontWeight: 500 }}>
+            Generating signed stream…
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
           </p>
         </div>
       )}

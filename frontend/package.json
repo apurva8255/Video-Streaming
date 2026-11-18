@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "cloudflix",
+=======
+  "name": "frontend",
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
   "private": true,
   "version": "0.0.0",
   "type": "module",

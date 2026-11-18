@@ -7,6 +7,11 @@ interface UploadViewProps {
   onSuccess: () => void;
 }
 
+<<<<<<< HEAD
+=======
+const ACCEPTED = [".mp4", ".mkv"];
+
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
 export default function UploadView({ onSuccess }: UploadViewProps) {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<UploadStatus>("idle");
@@ -29,10 +34,14 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
     if (f) handleFile(f);
   }, []);
 
+<<<<<<< HEAD
   const onDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
+=======
+  const onDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(true); };
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
   const onDragLeave = () => setIsDragging(false);
 
   const handleUpload = async () => {
@@ -53,7 +62,11 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
       await uploadToS3(signedUrl, file, (pct) => setProgress(pct));
 
       setStatus("success");
+<<<<<<< HEAD
       setTimeout(() => onSuccess(), 1600);
+=======
+      setTimeout(() => onSuccess(), 1800);
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Upload failed");
@@ -69,6 +82,7 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
   const isUploading = status === "uploading" || status === "reading";
 
   return (
+<<<<<<< HEAD
     <div className="animate-fade-up" style={{ maxWidth: 680, margin: "0 auto", padding: "32px 4% 64px" }}>
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
@@ -89,6 +103,20 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
       </div>
 
       {/* Netflix Drop zone */}
+=======
+    <div className="animate-fade-up" style={{ maxWidth: 640, margin: "0 auto" }}>
+      {/* Page title */}
+      <div style={{ marginBottom: 32 }}>
+        <h1 style={{ fontSize: "1.75rem", marginBottom: 8 }}>Upload a Video</h1>
+        <p style={{ color: "var(--text-secondary)" }}>
+          Supports <strong style={{ color: "var(--text-primary)" }}>.mp4</strong> and{" "}
+          <strong style={{ color: "var(--text-primary)" }}>.mkv</strong> — up to 2 GB.
+          Videos are transcoded to HLS automatically after upload.
+        </p>
+      </div>
+
+      {/* Drop zone */}
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
       <div
         id="upload-dropzone"
         onClick={() => !isUploading && inputRef.current?.click()}
@@ -97,6 +125,7 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
         onDragLeave={onDragLeave}
         style={{
           position: "relative",
+<<<<<<< HEAD
           borderRadius: 6,
           border: `2px dashed ${
             isDragging
@@ -114,21 +143,44 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
           textAlign: "center",
           cursor: isUploading ? "default" : "pointer",
           transition: "all 0.25s ease",
+=======
+          borderRadius: "var(--radius-xl)",
+          border: `2px dashed ${isDragging ? "var(--accent-2)" : file ? "var(--border-focus)" : "var(--border)"}`,
+          background: isDragging
+            ? "rgba(124, 58, 237, 0.08)"
+            : file
+            ? "rgba(124, 58, 237, 0.04)"
+            : "var(--bg-card)",
+          padding: "52px 32px",
+          textAlign: "center",
+          cursor: isUploading ? "default" : "pointer",
+          transition: "all 0.25s",
+          boxShadow: isDragging ? "0 0 0 4px rgba(124,58,237,0.15)" : "none",
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
         }}
       >
         <input
           ref={inputRef}
           type="file"
+<<<<<<< HEAD
           accept=".mp4,.mkv"
+=======
+          accept={ACCEPTED.join(",")}
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
           style={{ display: "none" }}
           onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
         />
 
+<<<<<<< HEAD
         {/* Cloudflix Upload Icon */}
+=======
+        {/* Icon */}
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
         <div
           style={{
             width: 64,
             height: 64,
+<<<<<<< HEAD
             borderRadius: "50%",
             background: file ? "var(--netflix-red)" : "rgba(255,255,255,0.08)",
             display: "flex",
@@ -150,10 +202,27 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" strokeLinecap="round" strokeLinejoin="round" />
             <polyline points="17 8 12 3 7 8" strokeLinecap="round" strokeLinejoin="round" />
             <line x1="12" y1="3" x2="12" y2="15" strokeLinecap="round" strokeLinejoin="round" />
+=======
+            borderRadius: "var(--radius-lg)",
+            background: "linear-gradient(135deg, rgba(124,58,237,0.3), rgba(168,85,247,0.15))",
+            border: "1px solid rgba(124,58,237,0.4)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 20px",
+            boxShadow: "0 0 24px var(--accent-glow)",
+          }}
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent-3)" strokeWidth="1.8">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points="17 8 12 3 7 8" strokeLinecap="round" strokeLinejoin="round" />
+            <line x1="12" y1="3" x2="12" y2="15" strokeLinecap="round" />
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
           </svg>
         </div>
 
         {file ? (
+<<<<<<< HEAD
           <div>
             <p style={{ fontWeight: 700, fontSize: "1.1rem", color: "#fff", marginBottom: 6 }}>
               {file.name}
@@ -190,28 +259,79 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
             </span>
             <span style={{ color: "var(--netflix-red)", fontWeight: 700 }}>
               {progress}%
+=======
+          <>
+            <p style={{ fontWeight: 600, color: "var(--text-primary)", marginBottom: 6 }}>
+              {file.name}
+            </p>
+            <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+              {formatSize(file.size)} · {file.type}
+            </p>
+            {!isUploading && status !== "success" && (
+              <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: 8 }}>
+                Click to change file
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            <p style={{ fontWeight: 600, color: "var(--text-primary)", marginBottom: 6, fontSize: "1.05rem" }}>
+              Drop your video here
+            </p>
+            <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)" }}>
+              or click to browse
+            </p>
+          </>
+        )}
+      </div>
+
+      {/* Progress bar */}
+      {isUploading && (
+        <div style={{ marginTop: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+            <span style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+              {status === "reading" ? "Reading metadata…" : "Uploading to S3…"}
+            </span>
+            <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--accent-3)" }}>
+              {status === "reading" ? "–" : `${progress}%`}
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
             </span>
           </div>
           <div
             style={{
               height: 6,
+<<<<<<< HEAD
               background: "rgba(255,255,255,0.15)",
               borderRadius: 3,
+=======
+              borderRadius: 99,
+              background: "rgba(255,255,255,0.08)",
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
               overflow: "hidden",
             }}
           >
             <div
               style={{
+<<<<<<< HEAD
                 width: `${progress}%`,
                 height: "100%",
                 background: "var(--netflix-red)",
                 transition: "width 0.2s ease",
+=======
+                height: "100%",
+                width: status === "reading" ? "10%" : `${progress}%`,
+                borderRadius: 99,
+                background: "linear-gradient(90deg, var(--accent-1), var(--accent-2))",
+                transition: "width 0.3s ease",
+                boxShadow: "0 0 8px var(--accent-glow)",
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
               }}
             />
           </div>
         </div>
       )}
 
+<<<<<<< HEAD
       {/* Success Notification */}
       {status === "success" && (
         <div
@@ -271,8 +391,85 @@ export default function UploadView({ onSuccess }: UploadViewProps) {
           style={{ flex: 1, padding: "14px", fontSize: "1.05rem" }}
         >
           {isUploading ? "Processing…" : "Start Upload & Transcode"}
+=======
+      {/* Success state */}
+      {status === "success" && (
+        <div
+          className="glass-card"
+          style={{
+            marginTop: 20,
+            padding: "14px 20px",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            borderColor: "rgba(34,197,94,0.3)",
+            background: "rgba(34,197,94,0.08)",
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5">
+            <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <p style={{ color: "#86efac", fontWeight: 500 }}>
+            Uploaded! Redirecting to your videos…
+          </p>
+        </div>
+      )}
+
+      {/* Error state */}
+      {status === "error" && (
+        <div
+          className="glass-card"
+          style={{
+            marginTop: 20,
+            padding: "14px 20px",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            borderColor: "rgba(244,63,94,0.3)",
+            background: "rgba(244,63,94,0.08)",
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" strokeWidth="2.5">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
+          </svg>
+          <p style={{ color: "#fda4af", fontWeight: 500 }}>{errorMsg}</p>
+        </div>
+      )}
+
+      {/* Upload button */}
+      <div style={{ marginTop: 24 }}>
+        <button
+          id="upload-submit-btn"
+          className="btn-primary"
+          onClick={handleUpload}
+          disabled={!file || isUploading || status === "success"}
+          style={{ width: "100%", justifyContent: "center", padding: "13px 24px", fontSize: "1rem" }}
+        >
+          {isUploading ? (
+            <>
+              <div className="spinner" />
+              {status === "reading" ? "Reading file…" : `Uploading ${progress}%`}
+            </>
+          ) : status === "success" ? (
+            <>✓ Done</>
+          ) : (
+            <>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeLinecap="round" strokeLinejoin="round" />
+                <polyline points="17 8 12 3 7 8" strokeLinecap="round" strokeLinejoin="round" />
+                <line x1="12" y1="3" x2="12" y2="15" strokeLinecap="round" />
+              </svg>
+              Upload Video
+            </>
+          )}
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
         </button>
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea

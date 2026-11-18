@@ -3,6 +3,7 @@ import "media-chrome/menu";
 import "hls-video-element";
 import type { Video } from "../types";
 
+<<<<<<< HEAD
 // Style the quality-selector dropdown to match Netflix
 const QUALITY_MENU_STYLES = `
   media-rendition-selectmenu {
@@ -12,6 +13,17 @@ const QUALITY_MENU_STYLES = `
     --media-menu-box-shadow: 0 8px 32px rgba(0,0,0,0.85);
     --media-menu-item-hover-background: rgba(229, 9, 20, 0.35);
     --media-menu-item-checked-background: rgba(229, 9, 20, 0.85);
+=======
+// Style the quality-selector dropdown to match our dark theme
+const QUALITY_MENU_STYLES = `
+  media-rendition-selectmenu {
+    --media-menu-background: rgba(13, 18, 32, 0.96);
+    --media-menu-border: 1px solid rgba(255,255,255,0.1);
+    --media-menu-border-radius: 10px;
+    --media-menu-box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    --media-menu-item-hover-background: rgba(124,58,237,0.25);
+    --media-menu-item-checked-background: rgba(124,58,237,0.4);
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
     --media-font-family: 'Inter', system-ui, sans-serif;
   }
 `;
@@ -34,8 +46,13 @@ function formatDuration(secs: number): string {
   const m = Math.floor((secs % 3600) / 60);
   const s = secs % 60;
   if (h > 0)
+<<<<<<< HEAD
     return `${h}h ${m}m ${s}s`;
   return `${m}m ${s}s`;
+=======
+    return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${m}:${String(s).padStart(2, "0")}`;
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
 }
 
 function formatSize(bytes: number): string {
@@ -45,11 +62,15 @@ function formatSize(bytes: number): string {
 }
 
 export default function Player({ videoUrl, video, onBack }: PlayerProps) {
+<<<<<<< HEAD
   // Proxy CloudFront requests through /cdn on localhost
+=======
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
   const url = videoUrl.replace(
     /^https:\/\/d2tqc45o39v2m3\.cloudfront\.net/,
     "/cdn",
   );
+<<<<<<< HEAD
 
   return (
     <div
@@ -82,6 +103,23 @@ export default function Player({ videoUrl, video, onBack }: PlayerProps) {
           <svg
             width="18"
             height="18"
+=======
+  return (
+    <div
+      className="animate-fade-up"
+      style={{ display: "flex", flexDirection: "column", gap: 24 }}
+    >
+      {/* Back button + title */}
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <button
+          className="btn-ghost"
+          onClick={onBack}
+          style={{ padding: "8px 14px", flexShrink: 0 }}
+        >
+          <svg
+            width="16"
+            height="16"
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -93,6 +131,7 @@ export default function Player({ videoUrl, video, onBack }: PlayerProps) {
               strokeLinejoin="round"
             />
           </svg>
+<<<<<<< HEAD
           Back to Browse
         </button>
 
@@ -112,6 +151,50 @@ export default function Player({ videoUrl, video, onBack }: PlayerProps) {
           background: "#000",
           boxShadow: "0 24px 60px rgba(0,0,0,0.9)",
           border: "1px solid rgba(255,255,255,0.1)",
+=======
+          Back
+        </button>
+        <div style={{ minWidth: 0 }}>
+          <h2
+            style={{
+              fontSize: "1.2rem",
+              fontWeight: 700,
+              color: "var(--text-primary)",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {video.videoName}
+          </h2>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              marginTop: 4,
+              alignItems: "center",
+            }}
+          >
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+              🕐 {formatDuration(video.duration)}
+            </span>
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+              💾 {formatSize(video.originalSize)}
+            </span>
+            <span className="badge badge-purple">HLS</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Player */}
+      <div
+        style={{
+          borderRadius: "var(--radius-xl)",
+          overflow: "hidden",
+          border: "1px solid var(--border)",
+          boxShadow: "var(--shadow-glow)",
+          background: "#000",
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
         }}
       >
         <media-controller>
@@ -136,6 +219,7 @@ export default function Player({ videoUrl, video, onBack }: PlayerProps) {
         </media-controller>
       </div>
 
+<<<<<<< HEAD
       {/* ── Title Header & Badges ── */}
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
@@ -184,20 +268,49 @@ export default function Player({ videoUrl, video, onBack }: PlayerProps) {
           { label: "DELIVERY", value: "HLS Multi-Rung (360p / 480p / 720p)" },
           { label: "EDGE CDN", value: "AWS CloudFront (Signed Cookies)" },
           { label: "AUDIO CODEC", value: "AAC @ 48 kHz" },
+=======
+      {/* Info card */}
+      <div
+        className="glass-card"
+        style={{
+          padding: "20px 24px",
+          display: "flex",
+          gap: 32,
+          flexWrap: "wrap",
+        }}
+      >
+        {[
+          { label: "FILE NAME", value: video.videoName },
+          { label: "DURATION", value: formatDuration(video.duration) },
+          { label: "ORIGINAL SIZE", value: formatSize(video.originalSize) },
+          { label: "FORMAT", value: "HLS Adaptive (master.m3u8)" },
+          { label: "CDN", value: "AWS CloudFront" },
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
         ].map(({ label, value }) => (
           <div key={label}>
             <p
               style={{
+<<<<<<< HEAD
                 fontSize: "0.72rem",
                 color: "#808080",
                 marginBottom: 4,
                 letterSpacing: "0.06em",
                 fontWeight: 600,
+=======
+                fontSize: "0.73rem",
+                color: "var(--text-muted)",
+                marginBottom: 4,
+                letterSpacing: "0.06em",
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
               }}
             >
               {label}
             </p>
+<<<<<<< HEAD
             <p style={{ color: "#ffffff", fontWeight: 500, fontSize: "0.92rem" }}>
+=======
+            <p style={{ color: "var(--text-primary)", fontWeight: 500 }}>
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
               {value}
             </p>
           </div>
@@ -205,4 +318,8 @@ export default function Player({ videoUrl, video, onBack }: PlayerProps) {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea

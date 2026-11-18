@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # 🎬 Cloudflix — Cloud-Native Video Streaming Platform
+=======
+# 🎬 Video Streaming Platform
+>>>>>>> 7b679675a67f4b624241954935733585fc5b37ea
 
 A production-grade, cloud-native video streaming platform built on AWS, featuring adaptive bitrate (ABR) HLS streaming, event-driven transcoding, and a modern React frontend. Videos are uploaded directly from the browser to S3, automatically transcoded into multi-resolution HLS segments by a Fargate container, and served securely through CloudFront with time-limited signed cookies.
 
