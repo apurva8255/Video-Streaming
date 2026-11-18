@@ -1,0 +1,77 @@
+issues:
+  - issue: it is not sure that if readStream has finished writing to writeStream and writeStream data is immediately drained and now empty, so return only when writeStream also has ended
+    fix: pipeline() handles this implicitly
+
+  - issue: @/* type imports intellisense works correctly but resolving to a normal js import requires a separate build tool as 'tsc' will not do it for you
+    fix: instead use relative imports as this type of import resolving increases build time
+
+  - issue: executing a service with no explicit roles and with explicit roles requires differnet handling, for explicit roles we need to pass the role to the service to make it work and current service will also require IAM::PassRole to pass the role
+    fix: "executing the ECS from lambda requires 2 permissions"
+      - ecs::RunTask and iam::PassRole
+      - ecs::RunTask is on the task-definition of ECS while iam::PassRole is on the IAM role of the ECS
+      - ecs::RunTask is to execute ECS job and iam:PassRole is to pass the ecsTaskExecutionRole role to ECS
+
+  - issue: file upload event on S3 can be non-PUT type too, uploading from console or uploading from cli uses different types
+    fix: so always check "all object creation events" instead
+
+  - issue: zipping the pnpm based node_modules directory causes failure as symlinked packages are not working as expected in the lambda runtime, maybe our zipping tool is not preserving the symlinks or the runtime didn't.
+    fix: 
+      - tried to use npm-like flat structure by adding 'node-linker=hoisted' in .npmrc in the project, but still didnt work, sylmlinking was still being used
+      - so migrated to npm for now
+      - A very interesting thing i found, using pnpm when i created the zip it was ~26MB but when i used npm then it becomes ~3MB, i think symlinking works very differently across tools!
+
+  - issue: "locally the container is running fine, but in ECS it is showing module dist/app.js not found".
+    fix: because 2 issues were there
+      1. task definition was pointing to an older image version 
+      2. we didnt update the image alias which was to be pushed, so it remained pointing to the older image
+      - so for solving this a new task definition revision will need to be created and it will point to the new updated image
+      - also will require to update the task-definition-arn env var in the lambda env vars + ecs::RunTask role policy
+
+  - issue: since we had pr-existing transcoded videos directory but with UUID so we can't upload with mongodb object id
+    fix: so for backward compatibility we will use UUID further on.
+
+  - issue: database should have the name of the video directory from permanent-bucket, so it got tricky as we can only get it after final processing
+    fix: instead, we will create an id which will be passed to the worker-container to upload with that name, for that we will upload in temp-bucket with the same name to take the name directly
+
+  - issue: for streaming a chunked transcoded video from a private bucket, presigned URLs will be terrible as there could be 100s of chunks and for each will require creating presigned URLs, same for cloudfront signed URL
+    fix: instead we will use cloudfront signed cookies, which are there for exactly this purpose, we cant allow a user for multiple files using signed URLs but we can do by using signed cookies as they are stored in browser for a given limited time and for each chunk browser sends the cookie to verify it's authority, here server sets the cookie header with 3 arrayed pairs, 'CloudFront-Policy', 'CloudFront-Signature' and 'CloudFront-Key-Pair-Id'
+
+  - issue: in vs-code, i got no issue of not using module-resolution even with latest ts-version but in antigravity it shown error
+    fix: so added moduleResolution "nodenext" with module "nodenext"
+
+  - issue: a presigned url is just to authorize to upload with the given file but not stops user on how many times it can be used, means S3 will not block user to use the same pre-signed url again until it is expired
+    fix: better practice is to keep the ttl very short such that only 1 request can be succeeded, no problem if it expires while the upload is in processing as expiry is done before upload start
+
+  - issue: even for a GetObjectCommand request, it got failed as the assumed role doesn't have s3::ListBucket permission, maybe it was getting used internally by the sdk
+    fix:  so added the s3::ListBucket permission to the role, and it got fixed
+
+  - issue: passing cloudfront private key directly in lambda env vars corrupts the newline(\n) chars by making \ and n separate, which gives error, {"message":"error:1E08010C:DECODER routines::unsupported"}
+    fix: most reliable fix is to base64 encode the key and then decode at runtime
+
+  - issue: for getting the signed cookies, you know the cookie behavior that it can set only cookies for it's own domain and parent domain, api.example.com can only set domain for api.example.com or (.)example.com, so adding cloudfront domain will make the cookie invalid
+    fix: we would require a custom domain where the cdn and application are on the same parent domain, since for testing i made the cdn publically accessible for now, but in prod will definitely a custom domain required
+
+info:
+  - path.relative(directoryPath,absolutePath), this allows to make extract the path starting after 'directoryPath' from absolutePath
+
+  - whole directory s3 uploads requires manually traversing the directory recursively and upload one by one with the correct path
+
+  - it is better practice to abstract the callback based logics like child process handling in a separate promised based function and try to make the code flow flat
+
+  - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI, this env var is passed to the container containing the credentials required to work with the allowed services in the assumed role
+
+  - on creating a docker image, it adds a default tag ':latest' as postfix
+
+  - an image can have multiple names pointing to same image, we usually do this on publishing the image with a different name by tagging
+
+  - serverless framework adds an another lambda function just for s3 notifications if an existing bucket configured to be used, because cloudformation can only set lambda trigger on buckets which are created in it's stack, so for existing buckets it creates a mini lambda(named like *-custom-resource-existing-s3) which runs aws-sdk to do 'PutBucketNotificationConfiguration' adding the lambda to be triggered by s3 notification
+
+  - serverless framework creates deployment artifact bucket, likely storing the zip + json based snapshot and state of the code and serverless config for each deployment, and it also provides flexibility to put max limit of snapshots to avoid clutter
+
+  - we can also ignore files to be uploaded to the lambda using the serverless config, reducing lambda code size
+
+  - in express, for adding multiple key-pairs value to a header like 'Set-Cookie' we use res.append('Set-Cookie','value'), append the values by calling it each time
+
+need-to-learn-explicitly:
+- Dockerfile configuration
+- child_processes module
